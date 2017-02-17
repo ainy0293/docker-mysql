@@ -116,9 +116,9 @@ early-plugin-load = ""
 #loose-innodb-sys-foreign-cols=0
 
 default_storage_engine = InnoDB
-#innodb_data_home_dir = ${$install_path}/data
+#innodb_data_home_dir = ${install_path}/data
 #innodb_data_file_path = ibdata1:10M:autoextend
-#innodb_log_group_home_dir = ${$install_path}/data
+#innodb_log_group_home_dir = ${install_path}/data
 #innodb_buffer_pool_size = 16M
 #innodb_log_file_size = 5M
 #innodb_log_buffer_size = 8M
