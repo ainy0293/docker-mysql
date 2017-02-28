@@ -14,5 +14,5 @@ RUN /etc/init.d/mysql start \
 	&& /etc/init.d/mysql stop \
 	&& rm -rf /tmp/mysql.sock.lock
 EXPOSE 3306
-CMD ["mysqld_safe"]
+CMD ["/usr/share/mysql.startup.sh"]
 

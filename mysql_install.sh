@@ -231,8 +231,17 @@ cat > /etc/ld.so.conf.d/mysql.conf<<EOF
 	/usr/local/lib
 EOF
 ldconfig
-
+sleep 2
+cat > /usr/share/mysql.startup.sh << EOF
+#!/bin/bash
+rm -rf /tmp/mysql.sock.lock
+sleep 1
+/usr/local/mysql/bin/mysqld_safe
+EOF
+sleep 1
+chmod +x /usr/share/mysql.startup.sh
 apt-get clean
 apt-get -y autoclean
 rm -rf /usr/local/src/boost_1_59_0/
 rm -rf /usr/local/src/mysql-5.7.17/
+
