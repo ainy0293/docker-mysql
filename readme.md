@@ -13,9 +13,6 @@ modify the container ubuntu apt source to wangyi ( 163 ) source
 
 修改容器内ubuntu的 apt 源为网易源
 
-and modify MySQL root user accessible from any address, Set the MySQL root password to 123456
-
-并且修改了 mysql root 用户可以从任意地址访问，设置 mysql root 密码为 123456
 
 The MySQL configuration file to do a little optimization. Enabled Innodb engine and set default engine.
 
@@ -38,11 +35,25 @@ see image, use command
 
 	sudo docker images
 
-### Run container from mirror
+### Run container from image, and setting MySQL root password
 
 use command
  
-	sudo docker run -d -p 3306:3306 --name mysql-server -h mysql-server ainy/mysql:5.7.17
+	sudo docker run -d -p 3306:3306 --name mysql-server -h mysql-server -e MYSQL_ROOT_PASSWORD=123456 ainy/mysql:5.7.17
+
+Usage: -e  MYSQL_ROOT_PASSWORD=123456 set your root password, ***123456*** is your password
+
+> Tips: Mysql root password must set, if you not set root password, this cann't start container.
+
+### Specify host access to MySQL server 
+
+use command
+
+	sudo docker run -d -p 3306:3306 --name mysql-server -h mysql-server -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_ALLOW_HOST=172.27.32.10 ainy/mysql:5.7.17
+
+Usage: -e MYSQL_ALLOW_HOST=172.27.32.10, ***172.27.32.10*** is you need connection host. 
+
+> Tips: If you not set allow access host, use default values is %, any host can be connection to this MySQL server
 
 ### see container
 

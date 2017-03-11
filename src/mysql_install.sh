@@ -2,7 +2,7 @@
 #mysql 5.7.17 install script on docker container
 #author: ainy min Emai: ainy@ifool.me website: http://ifool.me
 #date: 2017/2/12
-#version: 1.0
+#version: 1.1
 
 #check if user is root
 if [ $(id -u) != "0" ]; then
@@ -20,6 +20,20 @@ if [ ! -f mysql-5.7.17.tar.gz ]; then
 	echo "Error! file mysql-5.7.17.tar.gz Don't exist, exit!"
 	exit 1
 fi
+
+#Change APT source to mirrors.163.com
+cat > /etc/apt/sources.list << EOF
+deb http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ trusty-security main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ trusty-backports main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ trusty-security main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ trusty-backports main restricted universe multiverse
+EOF
 
 #install path
 install_path=/usr/local/mysql
@@ -52,7 +66,7 @@ groupadd mysql
 useradd -s /usr/sbin/nologin -M -g mysql mysql
 
 #my.cnf 
-cat > /etc/my.cnf<<EOF
+cat > /etc/my.cnf << EOF
 [client]
 #password   = your_password
 port        = 3306
@@ -219,8 +233,8 @@ fi
 # initialize mysql system databases and tables
 mkdir -p /usr/local/mysql/data
 chown -R mysql:mysql /usr/local/mysql/data
-/usr/local/mysql/bin/mysqld --initialize-insecure --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data  --user=mysql
-chgrp mysql /usr/local/mysql/.
+#/usr/local/mysql/bin/mysqld --initialize-insecure --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data  --user=mysql
+#chgrp mysql /usr/local/mysql/.
 
 cp support-files/mysql.server /etc/init.d/mysql
 chmod 755 /etc/init.d/mysql
@@ -232,16 +246,15 @@ cat > /etc/ld.so.conf.d/mysql.conf<<EOF
 EOF
 ldconfig
 sleep 2
-cat > /usr/share/mysql.startup.sh << EOF
-#!/bin/bash
-rm -rf /tmp/mysql.sock.lock
-sleep 1
-/usr/local/mysql/bin/mysqld_safe
-EOF
-sleep 1
+#sleep 1
+
+mv /root/mysql.startup.sh /usr/share/
 chmod +x /usr/share/mysql.startup.sh
+
+#Clean space
+apt-get -y autoremove
+apt-get -y purge nstall gcc g++ cmake make openssl libssl-dev libncurses5 libncurses5-dev bison
 apt-get clean
 apt-get -y autoclean
-rm -rf /usr/local/src/boost_1_59_0/
-rm -rf /usr/local/src/mysql-5.7.17/
-
+rm -rf /usr/local/src/boost_1_59_0/ /usr/local/src/mysql-5.7.17/ /root/boost_1_59_0.tar.gz /root/mysql-5.7.17.tar.gz
+rm -rf /var/lib/apt/list/*
