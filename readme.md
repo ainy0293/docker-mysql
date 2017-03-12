@@ -37,6 +37,8 @@ see image, use command
 
 ### Run container from image, and setting MySQL root password
 
+> ***PS: The first time you start, need initialize the system database, it may take a little time.***
+
 use command
  
 	sudo docker run -d -p 3306:3306 --name mysql-server -h mysql-server -e MYSQL_ROOT_PASSWORD=123456 ainy/mysql:5.7.17

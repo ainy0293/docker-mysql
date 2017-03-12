@@ -49,7 +49,7 @@ rm -rf /usr/local/mysql
 
 
 apt-get update
-apt-get -y install gcc g++ cmake make openssl libssl-dev libncurses5 libncurses5-dev bison
+apt-get -y install gcc g++ cmake make libssl-dev bison libncurses5 libncurses5-dev
 
 #Extract file
 tar -zxvf boost_1_59_0.tar.gz -C /usr/local/src
@@ -253,8 +253,12 @@ chmod +x /usr/share/mysql.startup.sh
 
 #Clean space
 apt-get -y autoremove
-apt-get -y purge nstall gcc g++ cmake make openssl libssl-dev libncurses5 libncurses5-dev bison
+for packages  in {gcc,g++,cmake,make,libssl-dev,bison,libncurses5,libncurses5-dev}
+	do
+		apt-get -y purge $packages
+	done
+
 apt-get clean
 apt-get -y autoclean
 rm -rf /usr/local/src/boost_1_59_0/ /usr/local/src/mysql-5.7.17/ /root/boost_1_59_0.tar.gz /root/mysql-5.7.17.tar.gz
-rm -rf /var/lib/apt/list/*
+rm -rf /var/lib/apt/lists/*
